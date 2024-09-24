@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAMdesk Selections</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bree+Serif&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="logo">CAMdesk</div>
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#services">Services</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section id="home">
+            <h1>Welcome to CAMdesk</h1>
+            <p>Experience seamless service management with our platform.</p>
+        </section>
+        <section id="services">
+            <h2>Our Services</h2>
+            <p>We offer a variety of services to meet your needs.</p>
+        </section>
+        <section id="users">
+            <h2>Top Users</h2>
+            <label for="pageSize">Rows per page:</label>
+            <select id="pageSize">
+                <option value="50">50</option>
+                <option value="100">100</option>
+                <option value="200">200</option>
+                <option value="500">500</option>
+                <option value="5000">5000</option>
+            </select>
+            <table id="users-table">
+                <thead>
+                    <tr>
+                        <th data-sort="dynamicName">Name</th>
+                        <th data-sort="email">Email</th>
+                        <th data-sort="branch">Branch</th>
+                        <th data-sort="department">Department</th>
+                        <th data-sort="optionalFields1">optionalFields1</th>
+                        <th data-sort="optionalFields1">optionalFields2</th>
+                        <th data-sort="optionalFields1">optionalFields3</th>
+                        <th data-sort="optionalFields1">optionalFields4</th>
+                        <th data-sort="optionalFields1">optionalFields5</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- User data will be inserted here by JavaScript -->
+                </tbody>
+            </table>
+        </section>
+        
+    </main>
+    <footer>
+        <p>&copy; 2023 CAMdesk. All rights reserved.</p>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>

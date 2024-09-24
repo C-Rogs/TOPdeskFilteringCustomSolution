@@ -1,0 +1,107 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Bree Serif', serif;
+    line-height: 1.6;
+    font-weight: 400;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+/* Header */
+header {
+    background-color: #005b99;
+    color: white;
+    padding: 1rem 0;
+    text-align: center;
+}
+
+header .logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+header nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+header nav ul li {
+    display: inline;
+    margin: 0 1rem;
+}
+
+header nav ul li a {
+    color: white;
+    text-decoration: none;
+}
+
+header nav ul li a:hover {
+    text-decoration: underline;
+}
+
+/* Main Content */
+main {
+    padding: 2rem;
+}
+
+main section {
+    margin-bottom: 2rem;
+}
+
+main section h1, main section h2 {
+    color: #005b99;
+}
+
+/* Users Table */
+#users-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+#users-table th, #users-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+#users-table th {
+    background-color: #005b99;
+    color: white;
+    text-align: left;
+    cursor: pointer; /* Add cursor pointer to indicate sortable columns */
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
+
+#users-table th[data-order="asc"]::after {
+    content: " ▲"; /* Ascending arrow */
+}
+
+#users-table th[data-order="desc"]::after {
+    content: " ▼"; /* Descending arrow */
+}
+
+#users-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+#users-table tr:hover {
+    background-color: #ddd;
+}
+
+/* Footer */
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 1rem 0;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}
