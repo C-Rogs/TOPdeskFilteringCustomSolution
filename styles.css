@@ -48,35 +48,103 @@ header nav ul li a:hover {
 /* Main Content */
 main {
     padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Align to left */
 }
 
 main section {
     margin-bottom: 2rem;
+    width: 100%; /* Ensure sections take full width */
 }
 
 main section h1, main section h2 {
     color: #005b99;
 }
 
+.table-container {
+    display: flex;
+    justify-content: flex-start; /* Align content to start */
+    gap: 2rem; /* Spacing between filter pane and table */
+    width: 100%; /* Ensure it takes the full width */
+}
+
+.floating-pane {
+    background-color: #005b99;
+    color: white;
+    padding: 1rem;
+    border-radius: 8px;
+    width: 200px;
+    position: sticky;
+    top: 0; /* Makes the filter pane sticky */
+    height: fit-content; /* Allows the pane to shrink to fit content */
+}
+
+.table-content {
+    width: calc(100% - 220px); /* Adjust the width of the table section to account for filter pane */
+    overflow-x: auto; /* Add horizontal scroll if needed */
+}
+
+.table-container {
+    display: flex;
+    justify-content: flex-start;
+    gap: 1rem; /* Reduces the gap between the filter pane and table */
+    width: 100%;
+}
+
+.floating-pane h3 {
+    margin-bottom: 1rem;
+}
+
+.floating-pane label {
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.floating-pane input {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border: none;
+    border-radius: 4px;
+}
+
+.floating-pane button {
+    background-color: white;
+    color: #005b99;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.floating-pane button:hover {
+    background-color: #ddd;
+}
+
 /* Users Table */
 #users-table {
-    width: 100%;
     border-collapse: collapse;
-    margin-top: 1rem;
+    margin-top: 0; /* Reduce the gap between filter and table */
+    border-radius: 8px; /* Rounds the corners of the table */
+    overflow: hidden; /* Ensures the border-radius effect applies to the table content */
 }
+
 
 #users-table th, #users-table td {
     border: 1px solid #ddd;
     padding: 8px;
 }
-
 #users-table th {
     background-color: #005b99;
     color: white;
     text-align: left;
-    cursor: pointer; /* Add cursor pointer to indicate sortable columns */
+    cursor: pointer;
     padding-top: 12px;
     padding-bottom: 12px;
+    top: 0; /* Sticks the table header to the top */
+    position: sticky;
+    z-index: 2; /* Ensure table header stays above table rows when scrolling */
 }
 
 #users-table th[data-order="asc"]::after {
@@ -93,6 +161,40 @@ main section h1, main section h2 {
 
 #users-table tr:hover {
     background-color: #ddd;
+}
+
+/* Dropdown Styling */
+select {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #005b99; /* Updated background color */
+    color: white; /* Updated text color */
+    font-size: 1rem;
+    margin: 0.5rem 0;
+    width: 100%;
+    max-width: 200px; /* Adjust as needed */
+}
+
+select:focus {
+    border-color: #005b99;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 91, 153, 0.5);
+}
+
+option {
+    padding: 8px;
+    background-color: white; /* Ensure options have a white background */
+    color: #333; /* Ensure options have a dark text color */
+}
+
+#pageSize {
+    margin: 1rem 0;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #005b99;
+    color: white;
 }
 
 /* Footer */

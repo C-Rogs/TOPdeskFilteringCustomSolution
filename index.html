@@ -28,8 +28,12 @@
             <h2>Our Services</h2>
             <p>We offer a variety of services to meet your needs.</p>
         </section>
+
+
         <section id="users">
             <h2>Top Users</h2>
+            
+            <!-- Rows per page selection below the heading -->
             <label for="pageSize">Rows per page:</label>
             <select id="pageSize">
                 <option value="50">50</option>
@@ -38,30 +42,49 @@
                 <option value="500">500</option>
                 <option value="5000">5000</option>
             </select>
-            <table id="users-table">
-                <thead>
-                    <tr>
-                        <th data-sort="dynamicName">Name</th>
-                        <th data-sort="email">Email</th>
-                        <th data-sort="branch">Branch</th>
-                        <th data-sort="department">Department</th>
-                        <th data-sort="optionalFields1">optionalFields1</th>
-                        <th data-sort="optionalFields1">optionalFields2</th>
-                        <th data-sort="optionalFields1">optionalFields3</th>
-                        <th data-sort="optionalFields1">optionalFields4</th>
-                        <th data-sort="optionalFields1">optionalFields5</th>
-                        
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- User data will be inserted here by JavaScript -->
-                </tbody>
-            </table>
+            
+            <div class="table-container">
+                <!-- Filter pane, sticky on the left -->
+                <div class="floating-pane">
+                    <h3>Filters</h3>
+                    <label for="branchFilter">Branch:</label>
+                    <input type="text" id="branchFilter" placeholder="Enter branch name">
+                    <label for="departmentFilter">Department:</label>
+                    <select name="departmentFilter" id="departmentFilter" multiple>
+                          <!-- Options will be populated here by JavaScript -->
+                    </select>
+                    <button id="applyFilters">Apply Filters</button>
+                </div>
+        
+                <!-- Users table to the right of the filter pane -->
+                <div class="table-content">
+                    <table id="users-table">
+                        <thead>
+                            <tr>
+                                <th data-sort="dynamicName">Name</th>
+                                <th data-sort="email">Email</th>
+                                <th data-sort="branch">Branch</th>
+                                <th data-sort="department">Department</th>
+                                <th data-sort="optionalFields1">optionalFields1</th>
+                                <th data-sort="optionalFields2">optionalFields2</th>
+                                <th data-sort="optionalFields3">optionalFields3</th>
+                                <th data-sort="optionalFields4">optionalFields4</th>
+                                <th data-sort="optionalFields5">optionalFields5</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- User data will be inserted here by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </section>
         
+
+
     </main>
     <footer>
-        <p>&copy; 2023 CAMdesk. All rights reserved.</p>
+        <p>© 2023 CAMdesk. All rights reserved.</p>
     </footer>
     <script src="script.js"></script>
 </body>
