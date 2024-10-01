@@ -284,6 +284,45 @@ document.addEventListener("DOMContentLoaded", function() {
         checkbox.addEventListener("change", applyFilters);
     });
 
+    document.getElementById("copyButton").addEventListener("click", async function() {
+        const table = document.getElementById("users-table");
+        let tableText = "";
+        const rows = table.querySelectorAll("tr");
+    
+        rows.forEach(row => {
+            const cols = row.querySelectorAll("td, th");
+            const rowData = Array.from(cols).map(col => col.innerText).join("\t"); // Use tab as delimiter
+            tableText += rowData + "\n";
+        });
+    
+        try {
+            await navigator.clipboard.writeText(tableText);
+            alert("Table copied to clipboard!");
+        } catch (err) {
+            console.error("Failed to copy: ", err);
+        }
+    });
+
+    document.getElementById("exportButton").addEventListener("click", function() {
+        const table = document.getElementById("users-table");
+        let csvContent = "";
+        const rows = table.querySelectorAll("tr");
+    
+        rows.forEach(row => {
+            const cols = row.querySelectorAll("td, th");
+            const rowData = Array.from(cols).map(col => col.innerText).join(",");
+            csvContent += rowData + "\r\n";
+        });
+    
+        const blob = new Blob([csvContent], { type: "text/csv" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.setAttribute("href", url);
+        a.setAttribute("download", "users.csv");
+        a.click();
+    });
+    
+
     fetchUsers(); // Initial fetch with default pageSize=50
     getDepartments();
     getExtraA();
