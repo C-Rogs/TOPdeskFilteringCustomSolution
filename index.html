@@ -11,7 +11,7 @@
 </head>
 <body>
     <header>
-        <div class="logo">CAMdesk</div>
+        <div class="logo">NHS Teaching Hospital</div>
         <nav>
             <ul>
                 <li><a href="#home">Home</a></li>
@@ -31,7 +31,7 @@
 
 
         <section id="users">
-            <h2>Top Users</h2>
+            <h2>Host Contact Database</h2>
             
             <!-- Rows per page selection below the heading -->
             <label for="pageSize">Rows per page:</label>
@@ -48,12 +48,31 @@
                 <div class="floating-pane">
                     <h3>Filters</h3>
                     <label for="branchFilter">Branch:</label>
-                    <input type="text" id="branchFilter" placeholder="Enter branch name">
+                    <input type="text" id="branchFilter" placeholder="Delft" readonly>
                     <label for="departmentFilter">Department:</label>
-                    <select name="departmentFilter" id="departmentFilter" multiple>
+                    <select name="departmentFilter" id="departmentFilter">
                           <!-- Options will be populated here by JavaScript -->
                     </select>
-                    <button id="applyFilters">Apply Filters</button>
+                    <label for="extraAFilter">Host Organisation name:</label>
+                    <select name="extraAFilter" id="extraAFilter">
+                          <!-- Options will be populated here by JavaScript -->
+                    </select>
+                    <label for="extraBFilter">Host trust name:</label>
+                    <select name="extraBFilter" id="extraBFilter">
+                          <!-- Options will be populated here by JavaScript -->
+                    </select>
+                    <label for="communicationPreferences">Communication Preferences:</label>
+                    <div class="communicationPreferences">
+                    <input type="checkbox" id="boolean1" name="optionalFields1.boolean1" value="True">
+                    <label id="bool" for="optionalFields1B1Filter"> optionalFields1B1</label>
+                    <input type="checkbox" id="boolean2" name="optionalFields1.boolean2" value="True">
+                    <label id="bool" for="optionalFields1B1Filter"> optionalFields1B1</label>
+                    <input type="checkbox" id="boolean3" name="optionalFields1.boolean3" value="True">
+                    <label id="bool" for="optionalFields1B1Filter"> optionalFields1B1</label>
+                    <input type="checkbox" id="boolean4" name="optionalFields1.boolean4" value="True">
+                    <label id="bool" for="optionalFields1B1Filter"> optionalFields1B1</label>
+                    <input type="checkbox" id="boolean5" name="optionalFields1.boolean5" value="True">
+                    </div>
                 </div>
         
                 <!-- Users table to the right of the filter pane -->
@@ -61,15 +80,18 @@
                     <table id="users-table">
                         <thead>
                             <tr>
-                                <th data-sort="dynamicName">Name</th>
+                                <th data-sort="firstName">Name</th>
+                                <th data-sort="surName">Surname</th>
                                 <th data-sort="email">Email</th>
                                 <th data-sort="branch">Branch</th>
                                 <th data-sort="department">Department</th>
-                                <th data-sort="optionalFields1">optionalFields1</th>
-                                <th data-sort="optionalFields2">optionalFields2</th>
-                                <th data-sort="optionalFields3">optionalFields3</th>
-                                <th data-sort="optionalFields4">optionalFields4</th>
-                                <th data-sort="optionalFields5">optionalFields5</th>
+                                <th data-sort="personExtraFieldA">Host organisation name</th>
+                                <th data-sort="personExtraFieldA">Host Trust name</th>
+                                <th data-sort="optionalFields1B1">optionalFields1B1</th>
+                                <th data-sort="optionalFields1B2">optionalFields1B2</th>
+                                <th data-sort="optionalFields1B3">optionalFields1B3</th>
+                                <th data-sort="optionalFields1B4">optionalFields1B4</th>
+                                <th data-sort="optionalFields1B5">optionalFields1B5</th>
                             </tr>
                         </thead>
                         <tbody>
