@@ -18,13 +18,16 @@ document.addEventListener("DOMContentLoaded", function() {
         let query = `branch.name==Delft`;
         
         if (departments.length > 0) {
-            query += `;department.name=in=(${departments.join(',')})`;
+            const departmentQuery = departments.map(dept => `department.name==${dept}`).join(';');
+            query += `;${departmentQuery}`;
         }
         if (extraAs.length > 0) {
-            query += `;personExtraFieldA.name=in=(${extraAs.join(',')})`;
+            const extraAQuery = extraAs.map(extraA => `personExtraFieldA.name==${extraA}`).join(';');
+            query += `;${extraAQuery}`;
         }
         if (extraBs.length > 0) {
-            query += `;personExtraFieldB.name=in=(${extraBs.join(',')})`;
+            const extraBQuery = extraBs.map(extraB => `personExtraFieldB.name==${extraB}`).join(';');
+            query += `;${extraBQuery}`;
         }
         
         if (optionalFields.length > 0) {
@@ -57,7 +60,6 @@ document.addEventListener("DOMContentLoaded", function() {
             console.error('Error fetching users:', error);
         }
     }
-    
 
     // Display the users in the table
     function displayUsers(users) {
@@ -256,11 +258,8 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     function getSelectedValues(selectElement) {
-        return Array.from(selectElement.selectedOptions)
-            .map(option => option.value)
-            .filter(value => value !== ""); // Exclude 'Any' option
+        return Array.from(selectElement.selectedOptions).map(option => option.value);
     }
-    
 
     // Gather all filter values and fetch users
     function applyFilters() {
@@ -273,7 +272,6 @@ document.addEventListener("DOMContentLoaded", function() {
             .map(checkbox => checkbox.id);
         fetchUsers(pageSize, departments, extraAs, extraBs, optionalFields);
     }
-    
 
     // Add event listeners
     pageSizeSelect.addEventListener("change", applyFilters);
@@ -283,6 +281,28 @@ document.addEventListener("DOMContentLoaded", function() {
     checkboxes.forEach(checkbox => {
         checkbox.addEventListener("change", applyFilters);
     });
+
+
+    document.getElementById("copyButton").addEventListener("click", async function() {
+        const table = document.getElementById("users-table");
+        let tableText = "";
+        const rows = table.querySelectorAll("tr");
+    
+        rows.forEach(row => {
+            const cols = row.querySelectorAll("td, th");
+            const rowData = Array.from(cols).map(col => col.innerText).join("\t"); // Use tab as delimiter
+            tableText += rowData + "\n";
+        });
+    
+        try {
+            await navigator.clipboard.writeText(tableText);
+            alert("Table copied to clipboard!");
+        } catch (err) {
+            console.error("Failed to copy: ", err);
+        }
+    });
+    
+    
 
     fetchUsers(); // Initial fetch with default pageSize=50
     getDepartments();

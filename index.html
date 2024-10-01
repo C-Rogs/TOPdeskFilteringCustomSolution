@@ -42,6 +42,9 @@
                 <option value="500">500</option>
                 <option value="5000">5000</option>
             </select>
+
+            <button id="copyButton">Copy Table</button>
+
             
             <div class="table-container">
                 <!-- Filter pane, sticky on the left -->
@@ -50,15 +53,15 @@
                     <label for="branchFilter">Branch:</label>
                     <input type="text" id="branchFilter" placeholder="Delft" readonly>
                     <label for="departmentFilter">Department:</label>
-                    <select name="departmentFilter" id="departmentFilter">
+                    <select name="departmentFilter" id="departmentFilter" multiple>
                           <!-- Options will be populated here by JavaScript -->
                     </select>
                     <label for="extraAFilter">Host Organisation name:</label>
-                    <select name="extraAFilter" id="extraAFilter">
+                    <select name="extraAFilter" id="extraAFilter" multiple>
                           <!-- Options will be populated here by JavaScript -->
                     </select>
                     <label for="extraBFilter">Host trust name:</label>
-                    <select name="extraBFilter" id="extraBFilter">
+                    <select name="extraBFilter" id="extraBFilter" multiple>
                           <!-- Options will be populated here by JavaScript -->
                     </select>
                     <label for="communicationPreferences">Communication Preferences:</label>

@@ -120,17 +120,46 @@ main section h1, main section h2 {
 
 }
 
-.floating-pane button {
-    background-color: white;
-    color: #005b99;
+/* Style for the multi-select dropdown */
+select[multiple] {
+    width: 100%; /* Ensure the dropdown fits within its container */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    overflow-x: hidden; /* Hide horizontal overflow */
+    margin: 0; /* Remove margins */
+    padding: 0px; /* Reduce padding */
+    border: 1px solid #ccc; /* Adjust border color */
+    border-radius: 4px; /* Slightly round the corners */
+}
+
+/* Style for selected options */
+select[multiple] option:checked {
+    background-color: #007bff; /* Highlight color */
+    color: white; /* Text color */
+}
+
+/* Style for options to handle long text */
+select[multiple] option {
+    white-space: nowrap; /* Prevent text from wrapping */
+    overflow: hidden; /* Hide overflow */
+    text-overflow: ellipsis; /* Add ellipsis (...) for overflow text */
+    color: white; /* Text color */
+}
+
+button {
+    color: white;
+    background-color: #005b99;
     border: none;
     padding: 0.5rem 1rem;
     border-radius: 4px;
     cursor: pointer;
 }
 
-.floating-pane button:hover {
+button:hover {
     background-color: #ddd;
+}
+
+#copyButton {
+    float: right;
 }
 
 /* Users Table */
@@ -179,7 +208,6 @@ select {
     padding: 8px;
     border: 1px solid #ddd;
     border-radius: 4px;
-    background-color: #005b99; /* Updated background color */
     color: white; /* Updated text color */
     font-size: 1rem;
     margin: 0.5rem 0;
@@ -187,11 +215,7 @@ select {
     max-width: 200px; /* Adjust as needed */
 }
 
-select:focus {
-    border-color: #005b99;
-    outline: none;
-    box-shadow: 0 0 5px rgba(0, 91, 153, 0.5);
-}
+
 
 option {
     padding: 8px;
@@ -206,6 +230,8 @@ option {
     border-radius: 4px;
     background-color: #005b99;
     color: white;
+    cursor: pointer;
+
 }
 
 /* Footer */
