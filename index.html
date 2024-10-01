@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <!-- Header -->
     <header>
         <div class="logo">NHS Teaching Hospital</div>
         <nav>
@@ -19,21 +20,26 @@
             </ul>
         </nav>
     </header>
+
+    <!-- Main Content -->
     <main>
+        <!-- Home Section -->
         <section id="home">
             <h1>Welcome to CAMdesk</h1>
             <p>Experience seamless service management with our platform.</p>
         </section>
+
+        <!-- Services Section -->
         <section id="services">
             <h2>Our Services</h2>
             <p>We offer a variety of services to meet your needs.</p>
         </section>
 
-
+        <!-- Users Section -->
         <section id="users">
             <h2>Host Contact Database</h2>
             
-            <!-- Rows per page selection below the heading -->
+            <!-- Rows Per Page Selector -->
             <label for="pageSize">Rows per page:</label>
             <select id="pageSize">
                 <option value="50">50</option>
@@ -43,43 +49,66 @@
                 <option value="5000">5000</option>
             </select>
 
-            <button id="copyButton">Copy Table</button>
-            <button id="exportButton">Export to CSV</button>
-
+            <!-- Copy and Export Buttons -->
+            <div class="table-actions">
+                <button id="copyButton">Copy Table</button>
+                <button id="exportButton">Export to CSV</button>
+            </div>
             
             <div class="table-container">
-                <!-- Filter pane, sticky on the left -->
+                <!-- Filter Pane -->
                 <div class="floating-pane">
                     <h3>Filters</h3>
                     <label for="branchFilter">Branch:</label>
                     <input type="text" id="branchFilter" placeholder="Delft" readonly>
+
                     <label for="departmentFilter">Department:</label>
-                    <select name="departmentFilter" id="departmentFilter" multiple>
-                          <!-- Options will be populated here by JavaScript -->
-                    </select>
-                    <label for="extraAFilter">Host Organisation name:</label>
-                    <select name="extraAFilter" id="extraAFilter" multiple>
-                          <!-- Options will be populated here by JavaScript -->
-                    </select>
-                    <label for="extraBFilter">Host trust name:</label>
-                    <select name="extraBFilter" id="extraBFilter" multiple>
-                          <!-- Options will be populated here by JavaScript -->
-                    </select>
-                    <label for="communicationPreferences">Communication Preferences:</label>
-                    <div class="communicationPreferences">
-                    <input type="checkbox" id="boolean1" name="optionalFields1.boolean1" value="True">
-                    <label id="bool" for="optionalFields1B1Filter"> optionalFields1B1</label>
-                    <input type="checkbox" id="boolean2" name="optionalFields1.boolean2" value="True">
-                    <label id="bool" for="optionalFields1B1Filter"> optionalFields1B1</label>
-                    <input type="checkbox" id="boolean3" name="optionalFields1.boolean3" value="True">
-                    <label id="bool" for="optionalFields1B1Filter"> optionalFields1B1</label>
-                    <input type="checkbox" id="boolean4" name="optionalFields1.boolean4" value="True">
-                    <label id="bool" for="optionalFields1B1Filter"> optionalFields1B1</label>
-                    <input type="checkbox" id="boolean5" name="optionalFields1.boolean5" value="True">
-                    </div>
+                    <select name="departmentFilter" id="departmentFilter" multiple></select>
+
+                    <label for="extraAFilter">Host Organisation Name:</label>
+                    <select name="extraAFilter" id="extraAFilter" multiple></select>
+
+                    <label for="extraBFilter">Host Trust Name:</label>
+                    <select name="extraBFilter" id="extraBFilter" multiple></select>
+
+                    <label for="optionalFields1Searchlist1Filter">Region:</label>
+                    <select name="optionalFields1Searchlist1Filter" id="optionalFields1Searchlist1Filter" multiple></select>
+
+                    <!-- Communication Preferences Section -->
+                    <fieldset>
+                        <legend>Communication Preferences:</legend>
+                        <div class="communicationPreferences">
+                            <input type="checkbox" id="optionalFields1.boolean1" name="optionalFields1.boolean1" value="True">
+                            <label for="boolean1">Industrial Action</label>
+
+                            <input type="checkbox" id="optionalFields1.boolean2" name="optionalFields1.boolean2" value="True">
+                            <label for="boolean2">Pay and Work Schedules</label>
+
+                            <input type="checkbox" id="optionalFields1.boolean3" name="optionalFields1.boolean3" value="True">
+                            <label for="boolean3">Pre-Employment Checks</label>
+
+                            <input type="checkbox" id="optionalFields1.boolean4" name="optionalFields1.boolean4" value="True">
+                            <label for="boolean4">Rotation and Contracts</label>
+
+                            <input type="checkbox" id="optionalFields1.boolean5" name="optionalFields1.boolean5" value="True">
+                            <label for="boolean5">Management Information</label>
+
+                            <input type="checkbox" id="optionalFields2.boolean1" name="optionalFields2.boolean1" value="True">
+                            <label for="boolean1">Sickness / Absence Management</label>
+
+                            <input type="checkbox" id="optionalFields2.boolean2" name="optionalFields2.boolean2" value="True">
+                            <label for="boolean2">Employee Relations Cases</label>
+
+                            <input type="checkbox" id="optionalFields2.boolean3" name="optionalFields2.boolean3" value="True">
+                            <label for="boolean3">Reasonable Adjustments</label>
+
+                            <input type="checkbox" id="optionalFields2.boolean4" name="optionalFields2.boolean4" value="True">
+                            <label for="boolean4">New Parent Support & Leave</label>
+                        </div>
+                    </fieldset>
                 </div>
         
-                <!-- Users table to the right of the filter pane -->
+                <!-- Users Table -->
                 <div class="table-content">
                     <table id="users-table">
                         <thead>
@@ -89,15 +118,22 @@
                                 <th data-sort="email">Email</th>
                                 <th data-sort="branch">Branch</th>
                                 <th data-sort="department">Department</th>
-                                <th data-sort="personExtraFieldA">Host organisation name</th>
-                                <th data-sort="personExtraFieldA">Host Trust name</th>
-                                <th data-sort="optionalFields1B1">optionalFields1B1</th>
-                                <th data-sort="optionalFields1B2">optionalFields1B2</th>
-                                <th data-sort="optionalFields1B3">optionalFields1B3</th>
-                                <th data-sort="optionalFields1B4">optionalFields1B4</th>
-                                <th data-sort="optionalFields1B5">optionalFields1B5</th>
+                                <th data-sort="region">Region</th>
+                                <th data-sort="locationSetting">Location setting</th>
+                                <th data-sort="personExtraFieldA">Host Organisation</th>
+                                <th data-sort="personExtraFieldB">Host Trust</th>
+                                <th data-sort="optionalFields1B1">Industrial Action</th>
+                                <th data-sort="optionalFields1B2">Pay and Work Schedules</th>
+                                <th data-sort="optionalFields1B3">Pre-Employment Checks</th>
+                                <th data-sort="optionalFields1B4">Rotation and Contracts</th>
+                                <th data-sort="optionalFields1B5">Management Information</th>
+                                <th data-sort="optionalFields2B1">Sickness / Absence Management</th>
+                                <th data-sort="optionalFields2B2">Employee Relations Cases</th>
+                                <th data-sort="optionalFields2B3">Reasonable Adjustments</th>
+                                <th data-sort="optionalFields2B4">New Parent Support & Leave</th>
                             </tr>
                         </thead>
+                        <div id="loadingIndicator" style="display: none;">Loading...</div>
                         <tbody>
                             <!-- User data will be inserted here by JavaScript -->
                         </tbody>
@@ -105,13 +141,11 @@
                 </div>
             </div>
         </section>
-        
-
-
     </main>
-    <footer>
-        <p>© 2023 CAMdesk. All rights reserved.</p>
-    </footer>
+
+
+
+    <!-- JavaScript File -->
     <script src="script.js"></script>
 </body>
 </html>

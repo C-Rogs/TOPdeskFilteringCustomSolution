@@ -1,22 +1,31 @@
 document.addEventListener("DOMContentLoaded", function() {
-    const API_URL = "https://demo-uk2.topdesk.net/tas/api/persons";
     const BASE_URL = "https://demo-uk2.topdesk.net/tas/api";
-
     let users = [];
-    let departments = [];    
+    let departments = [];
     let extraAs = [];
     let extraBs = [];
+    let optionalFields1Searchlist1s = [];
+    let isLoading = false;
 
+    // DOM elements
     const pageSizeSelect = document.getElementById("pageSize");
     const departmentSelect = document.getElementById("departmentFilter");
     const extraASelect = document.getElementById("extraAFilter");
     const extraBSelect = document.getElementById("extraBFilter");
+    const optionalFields1Searchlist1Select = document.getElementById("optionalFields1Searchlist1sFilter");
     const checkboxes = document.querySelectorAll(".floating-pane input[type='checkbox']");
+    const tableBody = document.querySelector("#users-table tbody");
+    const loadingIndicator = document.getElementById("loadingIndicator");
+
+    // Display loading spinner
+    function showLoading(isLoading) {
+        loadingIndicator.style.display = isLoading ? 'block' : 'none';
+    }
 
     // Fetch users with pagination and filters
     async function fetchUsers(pageSize = 50, departments = [], extraAs = [], extraBs = [], optionalFields = []) {
         let query = `branch.name==Delft`;
-        
+
         if (departments.length > 0) {
             query += `;department.name=in=(${departments.join(',')})`;
         }
@@ -26,58 +35,58 @@ document.addEventListener("DOMContentLoaded", function() {
         if (extraBs.length > 0) {
             query += `;personExtraFieldB.name=in=(${extraBs.join(',')})`;
         }
-        
         if (optionalFields.length > 0) {
             optionalFields.forEach(field => {
-                query += `;optionalFields1.${field}==true`;
+                query += `;${field}==true`;
             });
         }
-    
+
+        showLoading(true); // Show loading spinner during the API call
         try {
-            const response = await fetch(`${API_URL}?page_size=${pageSize}&query=${query}`, {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
+            const response = await fetch(`${BASE_URL}/persons?page_size=${pageSize}&query=${query}`, {
+                headers: { 'Content-Type': 'application/json' }
             });
-        
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-        
-            if (response.status === 204) {
-                users = []; // Set users to an empty array to indicate no data
-            } else {
-                const data = await response.json();
-                users = data;
-            }
-        
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+            users = response.status === 204 ? [] : await response.json();
             displayUsers(users);
             enableSorting();
         } catch (error) {
+            alert('Error fetching users. Please try again later.');
             console.error('Error fetching users:', error);
+        } finally {
+            showLoading(false); // Hide loading spinner after the API call
         }
     }
-    
 
-    // Display the users in the table
+    // Display users in the table
     function displayUsers(users) {
-        const tableBody = document.querySelector("#users-table tbody");
         tableBody.innerHTML = ""; // Clear existing rows
+        if (users.length === 0) {
+            tableBody.innerHTML = "<tr><td colspan='12'>No users found</td></tr>";
+            return;
+        }
         users.forEach(user => {
             const row = document.createElement("tr");
             row.innerHTML = `
-                <td>${user ? user.firstName : 'N/A'}</td>
-                <td>${user ? user.surName : 'N/A'}</td>
-                <td>${user ? user.email : 'N/A'}</td>
-                <td>${user && user.branch ? user.branch.name : 'N/A'}</td>
-                <td>${user && user.department ? user.department.name : 'N/A'}</td>
-                <td>${user && user.personExtraFieldA ? user.personExtraFieldA.name : 'N/A'}</td>
-                <td>${user && user.personExtraFieldB ? user.personExtraFieldA.name : 'N/A'}</td>
-                <td>${user && user.optionalFields1 ? user.optionalFields1.boolean1 : 'N/A'}</td>
-                <td>${user && user.optionalFields1 ? user.optionalFields1.boolean2 : 'N/A'}</td>
-                <td>${user && user.optionalFields1 ? user.optionalFields1.boolean3 : 'N/A'}</td>
-                <td>${user && user.optionalFields1 ? user.optionalFields1.boolean4 : 'N/A'}</td>
-                <td>${user && user.optionalFields1 ? user.optionalFields1.boolean5 : 'N/A'}</td>
+                <td>${user?.firstName || ''}</td>
+                <td>${user?.surName || ''}</td>
+                <td>${user?.email || ''}</td>
+                <td>${user?.branch?.name || ''}</td>
+                <td>${user?.department?.name || ''}</td>
+                <td>${user?.optionalFields1?.searchlist1.name || ''}</td>
+                <td>${user?.optionalFields1?.searchlist2.name || ''}</td>
+                <td>${user?.personExtraFieldA?.name || ''}</td>
+                <td>${user?.personExtraFieldB?.name || ''}</td>
+                <td>${user?.optionalFields1?.boolean1 || 'False'}</td>
+                <td>${user?.optionalFields1?.boolean2 || 'False'}</td>
+                <td>${user?.optionalFields1?.boolean3 || 'False'}</td>
+                <td>${user?.optionalFields1?.boolean4 || 'False'}</td>
+                <td>${user?.optionalFields1?.boolean5 || 'False'}</td>
+                <td>${user?.optionalFields2?.boolean1 || 'False'}</td>
+                <td>${user?.optionalFields2?.boolean2 || 'False'}</td>
+                <td>${user?.optionalFields2?.boolean3 || 'False'}</td>
+                <td>${user?.optionalFields2?.boolean4 || 'False'}</td>
             `;
             tableBody.appendChild(row);
         });
@@ -92,14 +101,12 @@ document.addEventListener("DOMContentLoaded", function() {
                 const currentOrder = header.getAttribute("data-order") || "asc";
                 const newOrder = currentOrder === "asc" ? "desc" : "asc";
 
-                // Sort the users array
                 users.sort((a, b) => {
                     const valueA = getValueForSort(a, sortKey);
                     const valueB = getValueForSort(b, sortKey);
                     return newOrder === "asc" ? (valueA > valueB ? 1 : -1) : (valueA < valueB ? 1 : -1);
                 });
 
-                // Update sorting arrow
                 headers.forEach(h => h.removeAttribute("data-order"));
                 header.setAttribute("data-order", newOrder);
 
@@ -110,157 +117,67 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Fetch and display departments
     async function getDepartments() {
-        const URL = BASE_URL + "/departments"; // Use the appropriate API URL
         try {
-            const response = await fetch(URL, {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
+            const response = await fetch(`${BASE_URL}/departments`, { headers: { 'Content-Type': 'application/json' } });
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
-            const data = await response.json();
-            displayDepartments(data);
+            departments = await response.json();
+            populateDropdown(departmentSelect, departments);
         } catch (error) {
             console.error('Error fetching departments:', error);
         }
     }
 
-    // Function to populate dropdown with department data
-    function displayDepartments(departments) {
-        const departmentFilter = document.getElementById("departmentFilter");
+    // Fetch and display Extra A entries
+    async function getExtraA() {
+        try {
+            const response = await fetch(`${BASE_URL}/personExtraFieldAEntries`, { headers: { 'Content-Type': 'application/json' } });
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
-        departmentFilter.innerHTML = ""; 
-        departmentFilter.appendChild(new Option("Any", ""));
-        departments.forEach(department => {
+            extraAs = await response.json();
+            populateDropdown(extraASelect, extraAs);
+        } catch (error) {
+            console.error('Error fetching Extra A fields:', error);
+        }
+    }
+
+    // Fetch and display Extra B entries
+    async function getExtraB() {
+        try {
+            const response = await fetch(`${BASE_URL}/personExtraFieldBEntries`, { headers: { 'Content-Type': 'application/json' } });
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+            extraBs = await response.json();
+            populateDropdown(extraBSelect, extraBs);
+        } catch (error) {
+            console.error('Error fetching Extra B fields:', error);
+        }
+    }
+
+    // Fetch and display optional tab 1 searchlist 1
+    async function getOptionalFields1Searchlist1s() {
+        try {
+            const response = await fetch(`${BASE_URL}/persons/free_fields/1/searchlists/1`, { headers: { 'Content-Type': 'application/json' } });
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+            optionalFields1Searchlist1s = await response.json();
+            populateDropdown(optionalFields1Searchlist1Select, optionalFields1Searchlist1s);
+        } catch (error) {
+            console.error('Error fetching optional tab 1 searchlist 1 fields:', error);
+        }
+    }
+
+    // Populate dropdowns with data
+    function populateDropdown(selectElement, data) {
+        selectElement.innerHTML = "";
+        selectElement.appendChild(new Option("Any", ""));
+        data.forEach(item => {
             const newOption = document.createElement("option");
-            newOption.value = department.name; // Assuming 'name' is the department name
-            newOption.text = department.name;
-            departmentFilter.appendChild(newOption);
+            newOption.value = item.name;
+            newOption.text = item.name;
+            selectElement.appendChild(newOption);
         });
     }
-
-        // Fetch and display extraA
-        async function getExtraA() {
-            const URL = BASE_URL + "/personExtraFieldAEntries"; // Use the appropriate API URL
-            try {
-                const response = await fetch(URL, {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
-    
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-    
-                const data = await response.json();
-                displayExtraA(data);
-            } catch (error) {
-                console.error('Error fetching ExtraA:', error);
-            }
-        }
-    
-        // Function to populate dropdown with ExtraA data
-        function displayExtraA(extraAs) {
-            const extraAFilter = document.getElementById("extraAFilter");
-    
-            extraAFilter.innerHTML = ""; 
-            extraAFilter.appendChild(new Option("Any", ""));
-            extraAs.forEach(extraA => {
-                const newOption = document.createElement("option");
-                newOption.value = extraA.name; // Assuming 'name' is the department name
-                newOption.text = extraA.name;
-                extraAFilter.appendChild(newOption);
-            });
-        }
-
-                // Fetch and display extraA
-        async function getExtraA() {
-            const URL = BASE_URL + "/personExtraFieldAEntries"; // Use the appropriate API URL
-            try {
-                const response = await fetch(URL, {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
-    
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-    
-                const data = await response.json();
-                displayExtraA(data);
-            } catch (error) {
-                console.error('Error fetching ExtraA:', error);
-            }
-        }
-    
-        // Function to populate dropdown with ExtraA data
-        function displayExtraA(extraAs) {
-            const extraAFilter = document.getElementById("extraAFilter");
-    
-            extraAFilter.innerHTML = ""; 
-            extraAFilter.appendChild(new Option("Any", ""));
-            extraAs.forEach(extraA => {
-                const newOption = document.createElement("option");
-                newOption.value = extraA.name; // Assuming 'name' is the department name
-                newOption.text = extraA.name;
-                extraAFilter.appendChild(newOption);
-            });
-        }
-
-        // Fetch and display extraB
-        async function getExtraB() {
-            const URL = BASE_URL + "/personExtraFieldBEntries"; // Use the appropriate API URL
-            try {
-                const response = await fetch(URL, {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
-    
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-    
-                const data = await response.json();
-                displayExtraB(data);
-            } catch (error) {
-                console.error('Error fetching ExtraB:', error);
-            }
-        }
-    
-        // Function to populate dropdown with ExtraA data
-        function displayExtraB(extraBs) {
-            const extraBFilter = document.getElementById("extraBFilter");
-    
-            extraBFilter.innerHTML = ""; 
-            extraBFilter.appendChild(new Option("Any", ""));
-            extraBs.forEach(extraB => {
-                const newOption = document.createElement("option");
-                newOption.value = extraB.name; 
-                newOption.text = extraB.name;
-                extraBFilter.appendChild(newOption);
-            });
-        }        
-
-    function getValueForSort(user, sortKey) {
-        if (sortKey === 'branch' || sortKey === 'department') {
-            return user[sortKey] ? user[sortKey].name : 'N/A';
-        }
-        return user[sortKey] || 'N/A';
-    }
-
-    function getSelectedValues(selectElement) {
-        return Array.from(selectElement.selectedOptions)
-            .map(option => option.value)
-            .filter(value => value !== ""); // Exclude 'Any' option
-    }
-    
 
     // Gather all filter values and fetch users
     function applyFilters() {
@@ -273,7 +190,6 @@ document.addEventListener("DOMContentLoaded", function() {
             .map(checkbox => checkbox.id);
         fetchUsers(pageSize, departments, extraAs, extraBs, optionalFields);
     }
-    
 
     // Add event listeners
     pageSizeSelect.addEventListener("change", applyFilters);
@@ -284,6 +200,7 @@ document.addEventListener("DOMContentLoaded", function() {
         checkbox.addEventListener("change", applyFilters);
     });
 
+    // Copy button
     document.getElementById("copyButton").addEventListener("click", async function() {
         const table = document.getElementById("users-table");
         let tableText = "";
@@ -303,6 +220,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 
+    // Export button
     document.getElementById("exportButton").addEventListener("click", function() {
         const table = document.getElementById("users-table");
         let csvContent = "";
@@ -321,10 +239,25 @@ document.addEventListener("DOMContentLoaded", function() {
         a.setAttribute("download", "users.csv");
         a.click();
     });
-    
 
+    // Initialize
     fetchUsers(); // Initial fetch with default pageSize=50
     getDepartments();
     getExtraA();
     getExtraB();
+    //getOptionalFields1Searchlist1s()
+
+    // Utility functions
+    function getValueForSort(user, sortKey) {
+        if (sortKey === 'branch' || sortKey === 'department') {
+            return user[sortKey]?.name || 'N/A';
+        }
+        return user[sortKey] || 'N/A';
+    }
+
+    function getSelectedValues(selectElement) {
+        return Array.from(selectElement.selectedOptions)
+            .map(option => option.value)
+            .filter(value => value !== ""); // Exclude 'Any' option
+    }
 });
