@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // Fetch users with pagination and filters
-    async function fetchUsers(pageSize = 50, departments = [], extraAs = [], extraBs = [], optionalFields = []) {
+    async function fetchUsers(pageSize = 50, departments = [], extraAs = [], extraBs = [], optionalFields1Searchlist1s = [], optionalFields1Searchlist2s = [], optionalFields = []) {
         let query = `branch.name==Delft`;
 
         if (departments.length > 0) {
@@ -38,12 +38,13 @@ document.addEventListener("DOMContentLoaded", function() {
             query += `;personExtraFieldB.name=in=(${extraBs.join(',')})`;
         }
         // Only add search lists to the query if they are not empty
-        if (optionalFields1Searchlist1s.length > 0 && optionalFields1Searchlist1s[0] !== "") {
+        if (optionalFields1Searchlist1s.length > 0) {
             query += `;optionalFields1.searchlist1.name=in=(${optionalFields1Searchlist1s.join(',')})`;
         }
-        if (optionalFields1Searchlist2s.length > 0 && optionalFields1Searchlist2s[0] !== "") {
+        if (optionalFields1Searchlist2s.length > 0) {
             query += `;optionalFields1.searchlist2.name=in=(${optionalFields1Searchlist2s.join(',')})`;
         }
+        // Add boolean fields only if they are checked
         if (optionalFields.length > 0) {
             optionalFields.forEach(field => {
                 query += `;${field}==true`;
@@ -124,6 +125,14 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 
+    function getValueForSort(user, sortKey) {
+        if (sortKey === 'branch' || sortKey === 'department') {
+            return user[sortKey]?.name || 'N/A';
+        }
+        return user[sortKey] || 'N/A';
+    }
+
+
     // Fetch and display departments
     async function getDepartments() {
         try {
@@ -189,42 +198,37 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
-    // Populate dropdowns with data
+    // Populate dropdown options
     function populateDropdown(selectElement, data) {
-        selectElement.innerHTML = "";
-        selectElement.appendChild(new Option("Any", ""));
         data.forEach(item => {
-            const newOption = document.createElement("option");
-            newOption.value = item.name;
-            newOption.text = item.name;
-            selectElement.appendChild(newOption);
+            const option = document.createElement("option");
+            option.value = item.name;
+            option.text = item.name;
+            selectElement.add(option);
         });
     }
 
-    // Gather all filter values and fetch users
-    function applyFilters() {
-        const pageSize = parseInt(pageSizeSelect.value);
-        const departments = getSelectedValues(departmentSelect);
-        const extraAs = getSelectedValues(extraASelect);
-        const extraBs = getSelectedValues(extraBSelect);
-        const optionalFields1Searchlist1s = getSelectedValues(optionalFields1Searchlist1Select);
-        const optionalFields1Searchlist2s = getSelectedValues(optionalFields1Searchlist2Select);
-        const optionalFields = Array.from(checkboxes)
-            .filter(checkbox => checkbox.checked)
-            .map(checkbox => checkbox.id);
-        fetchUsers(pageSize, departments, extraAs, extraBs, optionalFields1Searchlist1s, optionalFields1Searchlist2s, optionalFields);
-    }
+    // Apply filters based on selections
+    async function applyFilters() {
+        const pageSize = pageSizeSelect.value;
+        const selectedDepartments = Array.from(departmentSelect.selectedOptions).map(option => option.value);
+        const selectedExtraAs = Array.from(extraASelect.selectedOptions).map(option => option.value);
+        const selectedExtraBs = Array.from(extraBSelect.selectedOptions).map(option => option.value);
+        const selectedOptionalFields1Searchlist1s = Array.from(optionalFields1Searchlist1Select.selectedOptions).map(option => option.value);
+        const selectedOptionalFields1Searchlist2s = Array.from(optionalFields1Searchlist2Select.selectedOptions).map(option => option.value);
 
-    // Add event listeners
-    pageSizeSelect.addEventListener("change", applyFilters);
-    departmentSelect.addEventListener("change", applyFilters);
-    extraASelect.addEventListener("change", applyFilters);
-    extraBSelect.addEventListener("change", applyFilters);
-    optionalFields1Searchlist1Select.addEventListener("change", applyFilters);
-    optionalFields1Searchlist2Select.addEventListener("change", applyFilters);
-    checkboxes.forEach(checkbox => {
-        checkbox.addEventListener("change", applyFilters);
-    });
+        const selectedBooleans = Array.from(checkboxes).filter(checkbox => checkbox.checked).map(checkbox => checkbox.id);
+
+        await fetchUsers(
+            pageSize,
+            selectedDepartments,
+            selectedExtraAs,
+            selectedExtraBs,
+            selectedOptionalFields1Searchlist1s,
+            selectedOptionalFields1Searchlist2s,
+            selectedBooleans
+        );
+    }
 
     // Copy button
     document.getElementById("copyButton").addEventListener("click", async function() {
@@ -266,25 +270,21 @@ document.addEventListener("DOMContentLoaded", function() {
         a.click();
     });
 
-    // Initialize
-    fetchUsers(); // Initial fetch with default pageSize=50
-    getDepartments();
-    getExtraA();
-    getExtraB();
-    getOptionalFields1Searchlist1s()
-    getOptionalFields1Searchlist2s()
-
-    // Utility functions
-    function getValueForSort(user, sortKey) {
-        if (sortKey === 'branch' || sortKey === 'department') {
-            return user[sortKey]?.name || 'N/A';
-        }
-        return user[sortKey] || 'N/A';
+    // Initialize filters and table
+    async function initializeFilters() {
+        await Promise.all([
+            getDepartments(),
+            getExtraA(),
+            getExtraB(),
+            getOptionalFields1Searchlist1s(),
+            getOptionalFields1Searchlist2s()
+        ]);
+        await fetchUsers(); // Initial fetch without filters
     }
 
-    function getSelectedValues(selectElement) {
-        return Array.from(selectElement.selectedOptions)
-            .map(option => option.value)
-            .filter(value => value !== ""); // Exclude 'Any' option
-    }
+    initializeFilters();
+
+    // Event listener for the "Apply Filters" button
+    document.getElementById("applyFiltersButton").addEventListener("click", applyFilters);
+    pageSizeSelect.addEventListener("change", applyFilters);
 });
