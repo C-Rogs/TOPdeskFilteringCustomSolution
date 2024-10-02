@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", function() {
     let extraAs = [];
     let extraBs = [];
     let optionalFields1Searchlist1s = [];
+    let optionalFields1Searchlist2s = [];
     let isLoading = false;
 
     // DOM elements
@@ -13,6 +14,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const extraASelect = document.getElementById("extraAFilter");
     const extraBSelect = document.getElementById("extraBFilter");
     const optionalFields1Searchlist1Select = document.getElementById("optionalFields1Searchlist1sFilter");
+    const optionalFields1Searchlist2Select = document.getElementById("optionalFields1Searchlist2sFilter");
     const checkboxes = document.querySelectorAll(".floating-pane input[type='checkbox']");
     const tableBody = document.querySelector("#users-table tbody");
     const loadingIndicator = document.getElementById("loadingIndicator");
@@ -34,6 +36,13 @@ document.addEventListener("DOMContentLoaded", function() {
         }
         if (extraBs.length > 0) {
             query += `;personExtraFieldB.name=in=(${extraBs.join(',')})`;
+        }
+        // Only add search lists to the query if they are not empty
+        if (optionalFields1Searchlist1s.length > 0 && optionalFields1Searchlist1s[0] !== "") {
+            query += `;optionalFields1.searchlist1.name=in=(${optionalFields1Searchlist1s.join(',')})`;
+        }
+        if (optionalFields1Searchlist2s.length > 0 && optionalFields1Searchlist2s[0] !== "") {
+            query += `;optionalFields1.searchlist2.name=in=(${optionalFields1Searchlist2s.join(',')})`;
         }
         if (optionalFields.length > 0) {
             optionalFields.forEach(field => {
@@ -74,8 +83,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 <td>${user?.email || ''}</td>
                 <td>${user?.branch?.name || ''}</td>
                 <td>${user?.department?.name || ''}</td>
-                <td>${user?.optionalFields1?.searchlist1.name || ''}</td>
-                <td>${user?.optionalFields1?.searchlist2.name || ''}</td>
+                <td>${user?.optionalFields1?.searchlist1?.name || ''}</td>
+                <td>${user?.optionalFields1?.searchlist2?.name || ''}</td>
                 <td>${user?.personExtraFieldA?.name || ''}</td>
                 <td>${user?.personExtraFieldB?.name || ''}</td>
                 <td>${user?.optionalFields1?.boolean1 || 'False'}</td>
@@ -167,6 +176,19 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
+    // Fetch and display optional tab 1 searchlist 2
+    async function getOptionalFields1Searchlist2s() {
+        try {
+            const response = await fetch(`${BASE_URL}/persons/free_fields/1/searchlists/2`, { headers: { 'Content-Type': 'application/json' } });
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+            optionalFields1Searchlist2s = await response.json();
+            populateDropdown(optionalFields1Searchlist2Select, optionalFields1Searchlist2s);
+        } catch (error) {
+            console.error('Error fetching optional tab 1 searchlist 2 fields:', error);
+        }
+    }
+
     // Populate dropdowns with data
     function populateDropdown(selectElement, data) {
         selectElement.innerHTML = "";
@@ -185,10 +207,12 @@ document.addEventListener("DOMContentLoaded", function() {
         const departments = getSelectedValues(departmentSelect);
         const extraAs = getSelectedValues(extraASelect);
         const extraBs = getSelectedValues(extraBSelect);
+        const optionalFields1Searchlist1s = getSelectedValues(optionalFields1Searchlist1Select);
+        const optionalFields1Searchlist2s = getSelectedValues(optionalFields1Searchlist2Select);
         const optionalFields = Array.from(checkboxes)
             .filter(checkbox => checkbox.checked)
             .map(checkbox => checkbox.id);
-        fetchUsers(pageSize, departments, extraAs, extraBs, optionalFields);
+        fetchUsers(pageSize, departments, extraAs, extraBs, optionalFields1Searchlist1s, optionalFields1Searchlist2s, optionalFields);
     }
 
     // Add event listeners
@@ -196,6 +220,8 @@ document.addEventListener("DOMContentLoaded", function() {
     departmentSelect.addEventListener("change", applyFilters);
     extraASelect.addEventListener("change", applyFilters);
     extraBSelect.addEventListener("change", applyFilters);
+    optionalFields1Searchlist1Select.addEventListener("change", applyFilters);
+    optionalFields1Searchlist2Select.addEventListener("change", applyFilters);
     checkboxes.forEach(checkbox => {
         checkbox.addEventListener("change", applyFilters);
     });
@@ -245,7 +271,8 @@ document.addEventListener("DOMContentLoaded", function() {
     getDepartments();
     getExtraA();
     getExtraB();
-    //getOptionalFields1Searchlist1s()
+    getOptionalFields1Searchlist1s()
+    getOptionalFields1Searchlist2s()
 
     // Utility functions
     function getValueForSort(user, sortKey) {
