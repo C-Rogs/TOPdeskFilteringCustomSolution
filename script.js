@@ -15,6 +15,12 @@ document.addEventListener("DOMContentLoaded", function() {
     const extraBSelect = document.getElementById("extraBFilter");
     const optionalFields1Searchlist1Select = document.getElementById("optionalFields1Searchlist1sFilter");
     const optionalFields1Searchlist2Select = document.getElementById("optionalFields1Searchlist2sFilter");
+    const optionalFields1T1Select = document.getElementById("optionalFields1T1sFilter");
+    const optionalFields1T2Select = document.getElementById("optionalFields1T2sFilter");
+    const optionalFields1T3Select = document.getElementById("optionalFields1T3sFilter");
+    const optionalFields1D1Select = document.getElementById("optionalFields1D1sFilter");
+    const optionalFields1N1Select = document.getElementById("optionalFields1N1sFilter");
+    const optionalFields2D1Select = document.getElementById("optionalFields2D1sFilter");
     const checkboxes = document.querySelectorAll(".floating-pane input[type='checkbox']");
     const tableBody = document.querySelector("#users-table tbody");
     const loadingIndicator = document.getElementById("loadingIndicator");
@@ -84,19 +90,27 @@ document.addEventListener("DOMContentLoaded", function() {
                 <td>${user?.email || ''}</td>
                 <td>${user?.branch?.name || ''}</td>
                 <td>${user?.department?.name || ''}</td>
-                <td>${user?.optionalFields1?.searchlist1?.name || ''}</td>
-                <td>${user?.optionalFields1?.searchlist2?.name || ''}</td>
-                <td>${user?.personExtraFieldA?.name || ''}</td>
-                <td>${user?.personExtraFieldB?.name || ''}</td>
-                <td>${user?.optionalFields1?.boolean1 || 'False'}</td>
-                <td>${user?.optionalFields1?.boolean2 || 'False'}</td>
-                <td>${user?.optionalFields1?.boolean3 || 'False'}</td>
-                <td>${user?.optionalFields1?.boolean4 || 'False'}</td>
-                <td>${user?.optionalFields1?.boolean5 || 'False'}</td>
-                <td>${user?.optionalFields2?.boolean1 || 'False'}</td>
-                <td>${user?.optionalFields2?.boolean2 || 'False'}</td>
-                <td>${user?.optionalFields2?.boolean3 || 'False'}</td>
-                <td>${user?.optionalFields2?.boolean4 || 'False'}</td>
+                <td>${user?.optionalFields1?.searchlist1?.name || ''}</td> <!-- Region -->
+                <td>${user?.optionalFields1?.searchlist2?.name || ''}</td> <!-- Location setting -->
+                <td>${user?.personExtraFieldA?.name || ''}</td> <!--Host Organisation-->
+                <td>${user?.personExtraFieldB?.name || ''}</td> <!--Host Trust-->
+                <td>${user?.optionalFields1?.text1 || ''}</td> <!-- GMC/GDCP/Public Health Number -->
+                <td>${user?.optionalFields1?.text2 || ''}</td> <!-- Assignment Number -->
+                <td>${user?.optionalFields1?.text3 || ''}</td> <!-- NHS OMP Scheme -->
+                <td>${user?.optionalFields1?.date1 ? new Date(user.optionalFields1.date1).toLocaleDateString() : ''}</td> <!-- Professional Registration Expiry Date -->
+                <td>${user?.optionalFields1?.number1 || ''}</td> <!-- FTE -->
+                <td>${user?.optionalFields2?.searchlist1?.name || ''}</td> <!-- Host Org - Position -->
+                <td>${user?.optionalFields2?.searchlist2?.name || ''}</td> <!-- Host Org - Specialism -->
+                <td>${user?.optionalFields1?.boolean1 ? 'True' : 'False'}</td> <!-- Industrial Action -->
+                <td>${user?.optionalFields1?.boolean2 ? 'True' : 'False'}</td> <!-- Pay and Work Schedules -->
+                <td>${user?.optionalFields1?.boolean3 ? 'True' : 'False'}</td> <!-- Pre-Employment Checks -->
+                <td>${user?.optionalFields1?.boolean4 ? 'True' : 'False'}</td> <!-- Rotation and Contracts -->
+                <td>${user?.optionalFields1?.boolean5 ? 'True' : 'False'}</td> <!-- Management Information -->
+                <td>${user?.optionalFields2?.boolean1 ? 'True' : 'False'}</td> <!-- Sickness / Absence Management -->
+                <td>${user?.optionalFields2?.boolean2 ? 'True' : 'False'}</td> <!-- Employee Relations Cases -->
+                <td>${user?.optionalFields2?.boolean3 ? 'True' : 'False'}</td> <!-- Reasonable Adjustments -->
+                <td>${user?.optionalFields2?.boolean4 ? 'True' : 'False'}</td> <!-- New Parent Support & Leave -->
+                <td>${user?.optionalFields2?.date1 ? new Date(user.optionalFields2.date1).toLocaleDateString() : ''}</td> <!-- Last updated -->
             `;
             tableBody.appendChild(row);
         });

@@ -13,28 +13,10 @@
     <!-- Header -->
     <header>
         <div class="logo">NHS Teaching Hospital</div>
-        <nav>
-            <ul>
-                <li><a href="#home">Home</a></li>
-                <li><a href="#services">Services</a></li>
-            </ul>
-        </nav>
     </header>
 
     <!-- Main Content -->
     <main>
-        <!-- Home Section -->
-        <section id="home">
-            <h1>Welcome to CAMdesk</h1>
-            <p>Experience seamless service management with our platform.</p>
-        </section>
-
-        <!-- Services Section -->
-        <section id="services">
-            <h2>Our Services</h2>
-            <p>We offer a variety of services to meet your needs.</p>
-        </section>
-
         <!-- Users Section -->
         <section id="users">
             <h2>Host Contact Database</h2>
@@ -58,18 +40,12 @@
             <div class="table-container">
                 <!-- Filter Pane -->
                 <div class="floating-pane">
-                    <h3>Filters</h3>
+                    <h3>Filters </h3>
                     <label for="branchFilter">Branch:</label>
                     <input type="text" id="branchFilter" placeholder="Delft" readonly>
 
                     <label for="departmentFilter">Department:</label>
                     <select name="departmentFilter" id="departmentFilter" multiple></select>
-
-                    <label for="extraAFilter">Host Organisation Name:</label>
-                    <select name="extraAFilter" id="extraAFilter" multiple></select>
-
-                    <label for="extraBFilter">Host Trust Name:</label>
-                    <select name="extraBFilter" id="extraBFilter" multiple></select>
 
                     <label for="optionalFields1Searchlist1sFilter">Region:</label>
                     <select name="optionalFields1Searchlist1sFilter" id="optionalFields1Searchlist1sFilter" multiple></select>
@@ -77,36 +53,60 @@
                     <label for="optionalFields1Searchlist2sFilter">Location settings:</label>
                     <select name="optionalFields1Searchlist2sFilter" id="optionalFields1Searchlist2sFilter" multiple></select>
 
+                    <label for="extraAFilter">Host Organisation Name:</label>
+                    <select name="extraAFilter" id="extraAFilter" multiple></select>
+
+                    <label for="extraBFilter">Host Trust Name:</label>
+                    <select name="extraBFilter" id="extraBFilter" multiple></select>
+
+                    <label for="optionalFields1T1sFilter">Professional Number:</label>
+                    <input name="optionalFields1T1sFilter" id="optionalFields1T1sFilter" ></input>
+
+                    <label for="optionalFields1T2sFilter">Assignment Number:</label>
+                    <input name="optionalFields1T2sFilter" id="optionalFields1T2sFilter" ></input>
+
+                    <label for="optionalFields1T3sFilter">NHS OMP Scheme:</label>
+                    <input name="optionalFields1T3sFilter" id="optionalFields1T3sFilter" ></input>
+
+                    <label for="optionalFields1D1sFilter">Professional Registration Expire Date:</label>
+                    <input type="date" name="optionalFields1D1sFilter" id="optionalFields1D1sFilter" ></input>
+
+                    <label for="optionalFields1N1sFilter">FTE:</label>
+                    <input name="optionalFields1N1sFilter" id="optionalFields1N1sFilter" ></input>
+
+                    <label for="optionalFields2D1sFilter">Update Date:</label>
+                    <input type="date" name="optionalFields2D1sFilter" id="optionalFields2D1sFilter" ></input>
+
                     <!-- Communication Preferences Section -->
                     <fieldset>
                         <legend>Communication Preferences:</legend>
                         <div class="communicationPreferences">
                             <input type="checkbox" id="optionalFields1.boolean1" name="optionalFields1.boolean1" value="True">
-                            <label for="boolean1">Industrial Action</label>
+                            <label for="boolean1">Industrial Action</label><br>
 
                             <input type="checkbox" id="optionalFields1.boolean2" name="optionalFields1.boolean2" value="True">
-                            <label for="boolean2">Pay and Work Schedules</label>
+                            <label for="boolean2">Pay and Work Schedules</label><br>
 
                             <input type="checkbox" id="optionalFields1.boolean3" name="optionalFields1.boolean3" value="True">
-                            <label for="boolean3">Pre-Employment Checks</label>
+                            <label for="boolean3">Pre-Employment Checks</label><br>
 
                             <input type="checkbox" id="optionalFields1.boolean4" name="optionalFields1.boolean4" value="True">
-                            <label for="boolean4">Rotation and Contracts</label>
+                            <label for="boolean4">Rotation and Contracts</label><br>
 
                             <input type="checkbox" id="optionalFields1.boolean5" name="optionalFields1.boolean5" value="True">
-                            <label for="boolean5">Management Information</label>
+                            <label for="boolean5">Management Information</label><br>
 
                             <input type="checkbox" id="optionalFields2.boolean1" name="optionalFields2.boolean1" value="True">
-                            <label for="boolean1">Sickness / Absence Management</label>
+                            <label for="boolean1">Sickness / Absence Management</label><br>
 
                             <input type="checkbox" id="optionalFields2.boolean2" name="optionalFields2.boolean2" value="True">
-                            <label for="boolean2">Employee Relations Cases</label>
+                            <label for="boolean2">Employee Relations Cases</label><br>
 
                             <input type="checkbox" id="optionalFields2.boolean3" name="optionalFields2.boolean3" value="True">
-                            <label for="boolean3">Reasonable Adjustments</label>
+                            <label for="boolean3">Reasonable Adjustments</label><br>
 
                             <input type="checkbox" id="optionalFields2.boolean4" name="optionalFields2.boolean4" value="True">
-                            <label for="boolean4">New Parent Support & Leave</label>
+                            <label for="boolean4">New Parent Support & Leave</label><br>
                         </div>
                     </fieldset>
                     <button id="applyFiltersButton">Apply</button>
@@ -126,6 +126,13 @@
                                 <th data-sort="locationSetting">Location setting</th>
                                 <th data-sort="personExtraFieldA">Host Organisation</th>
                                 <th data-sort="personExtraFieldB">Host Trust</th>
+                                <th data-sort="optionalFields1T1">GMC/GDCP/Public Health Number</th>
+                                <th data-sort="optionalFields1T2">Assignment Number</th>
+                                <th data-sort="optionalFields1T3">NHS OMP Scheme</th>
+                                <th data-sort="optionalFields1D1">Professional Registration Expire Date</th>
+                                <th data-sort="optionalFields1N1">FTE</th>
+                                <th data-sort="optionalFields2S1">Host Org - Position</th>
+                                <th data-sort="optionalFields2S2">Host Org - Specialism</th>
                                 <th data-sort="optionalFields1B1">Industrial Action</th>
                                 <th data-sort="optionalFields1B2">Pay and Work Schedules</th>
                                 <th data-sort="optionalFields1B3">Pre-Employment Checks</th>
@@ -135,6 +142,7 @@
                                 <th data-sort="optionalFields2B2">Employee Relations Cases</th>
                                 <th data-sort="optionalFields2B3">Reasonable Adjustments</th>
                                 <th data-sort="optionalFields2B4">New Parent Support & Leave</th>
+                                <th data-sort="optionalFields2D1">Last updated</th>
                             </tr>
                         </thead>
                         <div id="loadingIndicator" style="display: none;">Loading...</div>

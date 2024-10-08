@@ -3,6 +3,8 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    scrollbar-color: grey #005b99;
+    scrollbar-width: thin;
   }
   
   body {
@@ -80,8 +82,7 @@
     top: 0;
     max-height: 90vh;
     overflow-y: auto;
-    scrollbar-color: grey #005b99;
-    scrollbar-width: thin;
+
   }
   
   .table-content {
@@ -94,7 +95,7 @@
   }
   
   /* Form Elements in Floating Pane */
-  .floating-pane input, select, button {
+  .floating-pane input, select{
     font-family: sans-serif;
     font-size: 1rem;
     font-weight: 400;
@@ -114,7 +115,7 @@
   
   .communicationPreferences {
     font-family: sans-serif;
-    display: inline-block;
+    font-size: small;
   }
   
   fieldset {
@@ -142,6 +143,9 @@
     padding: 0.5rem 1rem;
     border-radius: 4px;
     cursor: pointer;
+    width: 100%;
+    font-family: "Bree Serif", serif;
+
   }
   
   button:hover {
@@ -152,6 +156,11 @@
     width: auto;
     float: right;
     margin: 1px;
+  }
+
+  #applyFiltersButton {
+    color: #005b99;
+    background-color: white;
   }
   
   /* Users Table */
