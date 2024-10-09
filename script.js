@@ -15,6 +15,8 @@ document.addEventListener("DOMContentLoaded", function() {
     const extraBSelect = document.getElementById("extraBFilter");
     const optionalFields1Searchlist1Select = document.getElementById("optionalFields1Searchlist1sFilter");
     const optionalFields1Searchlist2Select = document.getElementById("optionalFields1Searchlist2sFilter");
+    const optionalFields2Searchlist1Select = document.getElementById("optionalFields2Searchlist1sFilter");
+    const optionalFields2Searchlist2Select = document.getElementById("optionalFields2Searchlist2sFilter");
     const optionalFields1T1Select = document.getElementById("optionalFields1T1sFilter");
     const optionalFields1T2Select = document.getElementById("optionalFields1T2sFilter");
     const optionalFields1T3Select = document.getElementById("optionalFields1T3sFilter");
@@ -31,24 +33,56 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // Fetch users with pagination and filters
-    async function fetchUsers(pageSize = 50, departments = [], extraAs = [], extraBs = [], optionalFields1Searchlist1s = [], optionalFields1Searchlist2s = [], optionalFields = []) {
+    async function fetchUsers(pageSize = 50, departments = [], extraAs = [], extraBs = [], optionalFields1Searchlist1s = [], optionalFields1Searchlist2s = [],optionalFields2Searchlist1s = [], optionalFields2Searchlist2s = [], selectedOptionalFields1T1s, selectedOptionalFields1T2s, selectedOptionalFields1T3s , selectedOptionalFields1D1s, selectedOptionalFields1N1s, selectedOptionalFields2D1s, optionalFields = []) {
         let query = `branch.name==Delft`;
 
         if (departments.length > 0) {
-            query += `;department.name=in=(${departments.join(',')})`;
+            query += `;department.name=in=("${departments.join('","')}")`;
         }
         if (extraAs.length > 0) {
-            query += `;personExtraFieldA.name=in=(${extraAs.join(',')})`;
+            query += `;personExtraFieldA.name=in=("${extraAs.join('","')}")`;
         }
+        
         if (extraBs.length > 0) {
-            query += `;personExtraFieldB.name=in=(${extraBs.join(',')})`;
+            query += `;personExtraFieldB.name=in=("${extraBs.join('","')}")`;
         }
-        // Only add search lists to the query if they are not empty
+        
         if (optionalFields1Searchlist1s.length > 0) {
-            query += `;optionalFields1.searchlist1.name=in=(${optionalFields1Searchlist1s.join(',')})`;
+            query += `;optionalFields1.searchlist1.name=in=("${optionalFields1Searchlist1s.join('","')}")`;
         }
+        
         if (optionalFields1Searchlist2s.length > 0) {
-            query += `;optionalFields1.searchlist2.name=in=(${optionalFields1Searchlist2s.join(',')})`;
+            query += `;optionalFields1.searchlist2.name=in=("${optionalFields1Searchlist2s.join('","')}")`;
+        }
+        
+        if (optionalFields2Searchlist1s.length > 0) {
+            query += `;optionalFields2.searchlist1.name=in=("${optionalFields2Searchlist1s.join('","')}")`;
+        }
+        
+        if (optionalFields2Searchlist2s.length > 0) {
+            query += `;optionalFields2.searchlist2.name=in=("${optionalFields2Searchlist2s.join('","')}")`;
+        }
+        
+        // Optional Fields with Text (no join since single value)
+        if (selectedOptionalFields1T1s) {
+            query += `;optionalFields1.text1=sw="${selectedOptionalFields1T1s}"`;
+        }
+        
+        if (selectedOptionalFields1T2s) {
+            query += `;optionalFields1.text2=sw="${selectedOptionalFields1T2s}"`;
+        }
+        
+        if (selectedOptionalFields1T3s) {
+            query += `;optionalFields1.text3=sw="${selectedOptionalFields1T3s}"`;
+        }
+        if (selectedOptionalFields1D1s) {
+            query += `;optionalFields1.date1=le=${selectedOptionalFields1D1s}T00:00:00Z`;
+        }
+        if (selectedOptionalFields1N1s) {
+            query += `;optionalFields1.number1=in=(${selectedOptionalFields1N1s})`;
+        }
+        if (selectedOptionalFields2D1s) {
+            query += `;optionalFields2.date1=le=${selectedOptionalFields2D1s}T00:00:00Z`;
         }
         // Add boolean fields only if they are checked
         if (optionalFields.length > 0) {
@@ -79,7 +113,8 @@ document.addEventListener("DOMContentLoaded", function() {
     function displayUsers(users) {
         tableBody.innerHTML = ""; // Clear existing rows
         if (users.length === 0) {
-            tableBody.innerHTML = "<tr><td colspan='12'>No users found</td></tr>";
+            tableBody.innerHTML = "<tr><td colspan='100%'>No users found</td></tr>";
+
             return;
         }
         users.forEach(user => {
@@ -162,9 +197,9 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     function getValueForSort(user, sortKey) {
-        if (sortKey === 'branch' || sortKey === 'department') {
-            return user[sortKey]?.name || 'N/A';
-        }
+        //if (sortKey === 'branch' || sortKey === 'department') {
+        //    return user[sortKey]?.name || 'N/A';
+        //}
         return user[sortKey] || 'N/A';
     }
 
@@ -234,6 +269,32 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
+    // Fetch and display optional tab 2 searchlist 1
+    async function getOptionalFields2Searchlist1s() {
+        try {
+            const response = await fetch(`${BASE_URL}/persons/free_fields/2/searchlists/1`, { headers: { 'Content-Type': 'application/json' } });
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+            optionalFields2Searchlist1s = await response.json();
+            populateDropdown(optionalFields2Searchlist1Select, optionalFields2Searchlist1s);
+        } catch (error) {
+            console.error('Error fetching optional tab 2 searchlist 1 fields:', error);
+        }
+    }
+
+    // Fetch and display optional tab 2 searchlist 2
+    async function getOptionalFields2Searchlist2s() {
+        try {
+            const response = await fetch(`${BASE_URL}/persons/free_fields/2/searchlists/2`, { headers: { 'Content-Type': 'application/json' } });
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+            optionalFields2Searchlist2s = await response.json();
+            populateDropdown(optionalFields2Searchlist2Select, optionalFields2Searchlist2s);
+        } catch (error) {
+            console.error('Error fetching optional tab 2 searchlist 2 fields:', error);
+        }
+    }
+
     // Populate dropdown options
     function populateDropdown(selectElement, data) {
         data.forEach(item => {
@@ -252,7 +313,14 @@ document.addEventListener("DOMContentLoaded", function() {
         const selectedExtraBs = Array.from(extraBSelect.selectedOptions).map(option => option.value);
         const selectedOptionalFields1Searchlist1s = Array.from(optionalFields1Searchlist1Select.selectedOptions).map(option => option.value);
         const selectedOptionalFields1Searchlist2s = Array.from(optionalFields1Searchlist2Select.selectedOptions).map(option => option.value);
-
+        const selectedOptionalFields2Searchlist1s = Array.from(optionalFields2Searchlist1Select.selectedOptions).map(option => option.value);
+        const selectedOptionalFields2Searchlist2s = Array.from(optionalFields2Searchlist2Select.selectedOptions).map(option => option.value);
+        const selectedOptionalFields1T1s = optionalFields1T1Select.value;
+        const selectedOptionalFields1T2s = optionalFields1T2Select.value;
+        const selectedOptionalFields1T3s = optionalFields1T3Select.value;
+        const selectedOptionalFields1D1s = optionalFields1D1Select.value;
+        const selectedOptionalFields1N1s = optionalFields1N1Select.value;
+        const selectedOptionalFields2D1s = optionalFields2D1Select.value;
         const selectedBooleans = Array.from(checkboxes).filter(checkbox => checkbox.checked).map(checkbox => checkbox.id);
 
         await fetchUsers(
@@ -262,6 +330,14 @@ document.addEventListener("DOMContentLoaded", function() {
             selectedExtraBs,
             selectedOptionalFields1Searchlist1s,
             selectedOptionalFields1Searchlist2s,
+            selectedOptionalFields2Searchlist1s,
+            selectedOptionalFields2Searchlist2s,
+            selectedOptionalFields1T1s,
+            selectedOptionalFields1T2s,
+            selectedOptionalFields1T3s,
+            selectedOptionalFields1D1s,
+            selectedOptionalFields1N1s,
+            selectedOptionalFields2D1s,
             selectedBooleans
         );
     }
@@ -313,7 +389,9 @@ document.addEventListener("DOMContentLoaded", function() {
             getExtraA(),
             getExtraB(),
             getOptionalFields1Searchlist1s(),
-            getOptionalFields1Searchlist2s()
+            getOptionalFields1Searchlist2s(),
+            getOptionalFields2Searchlist1s(),
+            getOptionalFields2Searchlist2s()
         ]);
         await fetchUsers(); // Initial fetch without filters
     }
