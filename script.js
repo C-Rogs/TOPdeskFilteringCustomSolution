@@ -66,7 +66,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
             users = response.status === 204 ? [] : await response.json();
             displayUsers(users);
-            enableSorting();
+            enableSorting(users);
         } catch (error) {
             alert('Error fetching users. Please try again later.');
             console.error('Error fetching users:', error);
@@ -117,7 +117,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // Sorting functionality
-    function enableSorting() {
+    function enableSortingOld() {
         const headers = document.querySelectorAll("#users-table th");
         headers.forEach(header => {
             header.addEventListener("click", () => {
@@ -135,6 +135,28 @@ document.addEventListener("DOMContentLoaded", function() {
                 header.setAttribute("data-order", newOrder);
 
                 displayUsers(users);
+            });
+        });
+    }
+
+    function enableSorting(users) {
+        const headers = document.querySelectorAll("#users-table th");
+        headers.forEach(header => {
+            header.addEventListener("click", () => {
+                const sortKey = header.getAttribute("data-sort");
+                const currentOrder = header.getAttribute("data-order") || "asc";
+                const newOrder = currentOrder === "asc" ? "desc" : "asc";
+    
+                users.sort((a, b) => {
+                    const valueA = getValueForSort(a, sortKey);
+                    const valueB = getValueForSort(b, sortKey);
+                    return newOrder === "asc" ? (valueA > valueB ? 1 : -1) : (valueA < valueB ? 1 : -1);
+                });
+    
+                headers.forEach(h => h.removeAttribute("data-order"));
+                header.setAttribute("data-order", newOrder);
+    
+                displayUsers(users); // Update the display with the sorted users
             });
         });
     }
