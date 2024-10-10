@@ -27,6 +27,15 @@ document.addEventListener("DOMContentLoaded", function() {
     const tableBody = document.querySelector("#users-table tbody");
     const loadingIndicator = document.getElementById("loadingIndicator");
 
+    document.querySelectorAll('input, select').forEach(element => {
+        element.addEventListener('keydown', function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault(); // Prevent default action (form submission, etc.)
+                applyFilters(); // Call your filter function
+            }
+        });
+    });
+
     // Display loading spinner
     function showLoading(isLoading) {
         loadingIndicator.style.display = isLoading ? 'block' : 'none';
@@ -174,7 +183,7 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 
-    function enableSorting(users) {
+    function enableSortingold(users) {
         const headers = document.querySelectorAll("#users-table th");
         headers.forEach(header => {
             header.addEventListener("click", () => {
@@ -196,11 +205,66 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 
+    function enableSorting(users) {
+    const headers = document.querySelectorAll("#users-table th");
+    headers.forEach(header => {
+        header.addEventListener("click", () => {
+            const sortKey = header.getAttribute("data-sort");
+            const currentOrder = header.getAttribute("data-order") || "asc";
+            const newOrder = currentOrder === "asc" ? "desc" : "asc";
+
+            users.sort((a, b) => {
+                const valueA = getValueForSort(a, sortKey);
+                const valueB = getValueForSort(b, sortKey);
+
+                // Handle sorting with respect to empty values
+                if (!valueA && valueB) return newOrder === "asc" ? 1 : -1; // Empty comes after non-empty
+                if (valueA && !valueB) return newOrder === "asc" ? -1 : 1; // Non-empty comes before empty
+                if (!valueA && !valueB) return 0; // Both values are empty
+
+                // Regular sorting when both values are present
+                return newOrder === "asc" ? (valueA > valueB ? 1 : -1) : (valueA < valueB ? 1 : -1);
+            });
+
+            headers.forEach(h => h.removeAttribute("data-order"));
+            header.setAttribute("data-order", newOrder);
+
+            displayUsers(users); // Update the display with the sorted users
+        });
+    });
+}
+
     function getValueForSort(user, sortKey) {
-        //if (sortKey === 'branch' || sortKey === 'department') {
-        //    return user[sortKey]?.name || 'N/A';
-        //}
-        return user[sortKey] || 'N/A';
+        const value = (() => {
+            switch (sortKey) {
+                case 'branch': return user.branch?.name || '';
+                case 'department': return user.department?.name || '';
+                case 'region': return user.optionalFields1?.searchlist1?.name || ''; // Update to reflect actual field usage
+                case 'locationSetting': return user.optionalFields1?.searchlist2?.name || ''; // Update to reflect actual field usage
+                case 'personExtraFieldA': return user.personExtraFieldA?.name || '';
+                case 'personExtraFieldB': return user.personExtraFieldB?.name || '';
+                case 'optionalFields1T1': return user.optionalFields1?.text1 || '';
+                case 'optionalFields1T2': return user.optionalFields1?.text2 || '';
+                case 'optionalFields1T3': return user.optionalFields1?.text3 || '';
+                case 'optionalFields1D1': return user.optionalFields1?.date1 ? new Date(user.optionalFields1.date1).getTime() : ''; // Return empty string if no date
+                case 'optionalFields1N1': return parseFloat(user.optionalFields1?.number1) || ''; // Return empty string if NaN
+                case 'optionalFields2S1': return user.optionalFields2?.searchlist1?.name || '';
+                case 'optionalFields2S2': return user.optionalFields2?.searchlist2?.name || '';
+                case 'optionalFields1B1': return user.optionalFields1?.boolean1 ? 'True' : 'False';
+                case 'optionalFields1B2': return user.optionalFields1?.boolean2 ? 'True' : 'False';
+                case 'optionalFields1B3': return user.optionalFields1?.boolean3 ? 'True' : 'False';
+                case 'optionalFields1B4': return user.optionalFields1?.boolean4 ? 'True' : 'False';
+                case 'optionalFields1B5': return user.optionalFields1?.boolean5 ? 'True' : 'False';
+                case 'optionalFields2B1': return user.optionalFields2?.boolean1 ? 'True' : 'False';
+                case 'optionalFields2B2': return user.optionalFields2?.boolean2 ? 'True' : 'False';
+                case 'optionalFields2B3': return user.optionalFields2?.boolean3 ? 'True' : 'False';
+                case 'optionalFields2B4': return user.optionalFields2?.boolean4 ? 'True' : 'False';
+                case 'optionalFields2D1': return user.optionalFields2?.date1 ? new Date(user.optionalFields2.date1).getTime() : ''; // Return empty string if no date
+                default: return user[sortKey] || ''; // Handle other fields generically
+            }
+        })();
+
+        return value;
     }
 
 
@@ -401,4 +465,14 @@ document.addEventListener("DOMContentLoaded", function() {
     // Event listener for the "Apply Filters" button
     document.getElementById("applyFiltersButton").addEventListener("click", applyFilters);
     pageSizeSelect.addEventListener("change", applyFilters);
+
+    // Event listener for enter key
+    document.querySelectorAll('input, select').forEach(element => {
+        element.addEventListener('keydown', function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault(); // Prevent default action (form submission, etc.)
+                applyFilters(); // Call your filter function
+            }
+        });
+    });
 });
