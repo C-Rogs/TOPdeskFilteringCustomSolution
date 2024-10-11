@@ -138,11 +138,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 <td>${user?.optionalFields1?.searchlist2?.name || ''}</td> <!-- Location setting -->
                 <td>${user?.personExtraFieldA?.name || ''}</td> <!--Host Organisation-->
                 <td>${user?.personExtraFieldB?.name || ''}</td> <!--Host Trust-->
-                <td>${user?.optionalFields1?.text1 || ''}</td> <!-- GMC/GDCP/Public Health Number -->
-                <td>${user?.optionalFields1?.text2 || ''}</td> <!-- Assignment Number -->
-                <td>${user?.optionalFields1?.text3 || ''}</td> <!-- NHS OMP Scheme -->
-                <td>${user?.optionalFields1?.date1 ? new Date(user.optionalFields1.date1).toLocaleDateString() : ''}</td> <!-- Professional Registration Expiry Date -->
-                <td>${user?.optionalFields1?.number1 || ''}</td> <!-- FTE -->
+ 
                 <td>${user?.optionalFields2?.searchlist1?.name || ''}</td> <!-- Host Org - Position -->
                 <td>${user?.optionalFields2?.searchlist2?.name || ''}</td> <!-- Host Org - Specialism -->
                 <td>${user?.optionalFields1?.boolean1 ? 'True' : 'False'}</td> <!-- Industrial Action -->
@@ -156,54 +152,16 @@ document.addEventListener("DOMContentLoaded", function() {
                 <td>${user?.optionalFields2?.boolean4 ? 'True' : 'False'}</td> <!-- New Parent Support & Leave -->
                 <td>${user?.optionalFields2?.date1 ? new Date(user.optionalFields2.date1).toLocaleDateString() : ''}</td> <!-- Last updated -->
             `;
+            //Removed fields 
+            //<td>${user?.optionalFields1?.text1 || ''}</td> <!-- GMC/GDCP/Public Health Number -->
+            //<td>${user?.optionalFields1?.text2 || ''}</td> <!-- Assignment Number -->
+            //<td>${user?.optionalFields1?.text3 || ''}</td> <!-- NHS OMP Scheme -->
+            //<td>${user?.optionalFields1?.date1 ? new Date(user.optionalFields1.date1).toLocaleDateString() : ''}</td> <!-- Professional Registration Expiry Date -->
+            //<td>${user?.optionalFields1?.number1 || ''}</td> <!-- FTE -->
             tableBody.appendChild(row);
         });
     }
 
-    // Sorting functionality
-    function enableSortingOld() {
-        const headers = document.querySelectorAll("#users-table th");
-        headers.forEach(header => {
-            header.addEventListener("click", () => {
-                const sortKey = header.getAttribute("data-sort");
-                const currentOrder = header.getAttribute("data-order") || "asc";
-                const newOrder = currentOrder === "asc" ? "desc" : "asc";
-
-                users.sort((a, b) => {
-                    const valueA = getValueForSort(a, sortKey);
-                    const valueB = getValueForSort(b, sortKey);
-                    return newOrder === "asc" ? (valueA > valueB ? 1 : -1) : (valueA < valueB ? 1 : -1);
-                });
-
-                headers.forEach(h => h.removeAttribute("data-order"));
-                header.setAttribute("data-order", newOrder);
-
-                displayUsers(users);
-            });
-        });
-    }
-
-    function enableSortingold(users) {
-        const headers = document.querySelectorAll("#users-table th");
-        headers.forEach(header => {
-            header.addEventListener("click", () => {
-                const sortKey = header.getAttribute("data-sort");
-                const currentOrder = header.getAttribute("data-order") || "asc";
-                const newOrder = currentOrder === "asc" ? "desc" : "asc";
-    
-                users.sort((a, b) => {
-                    const valueA = getValueForSort(a, sortKey);
-                    const valueB = getValueForSort(b, sortKey);
-                    return newOrder === "asc" ? (valueA > valueB ? 1 : -1) : (valueA < valueB ? 1 : -1);
-                });
-    
-                headers.forEach(h => h.removeAttribute("data-order"));
-                header.setAttribute("data-order", newOrder);
-    
-                displayUsers(users); // Update the display with the sorted users
-            });
-        });
-    }
 
     function enableSorting(users) {
     const headers = document.querySelectorAll("#users-table th");
@@ -379,11 +337,11 @@ document.addEventListener("DOMContentLoaded", function() {
         const selectedOptionalFields1Searchlist2s = Array.from(optionalFields1Searchlist2Select.selectedOptions).map(option => option.value);
         const selectedOptionalFields2Searchlist1s = Array.from(optionalFields2Searchlist1Select.selectedOptions).map(option => option.value);
         const selectedOptionalFields2Searchlist2s = Array.from(optionalFields2Searchlist2Select.selectedOptions).map(option => option.value);
-        const selectedOptionalFields1T1s = optionalFields1T1Select.value;
-        const selectedOptionalFields1T2s = optionalFields1T2Select.value;
-        const selectedOptionalFields1T3s = optionalFields1T3Select.value;
-        const selectedOptionalFields1D1s = optionalFields1D1Select.value;
-        const selectedOptionalFields1N1s = optionalFields1N1Select.value;
+        const selectedOptionalFields1T1s = '';
+        const selectedOptionalFields1T2s = '';
+        const selectedOptionalFields1T3s = '';
+        const selectedOptionalFields1D1s = '';
+        const selectedOptionalFields1N1s = '';
         const selectedOptionalFields2D1s = optionalFields2D1Select.value;
         const selectedBooleans = Array.from(checkboxes).filter(checkbox => checkbox.checked).map(checkbox => checkbox.id);
 

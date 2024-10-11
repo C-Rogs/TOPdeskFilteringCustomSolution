@@ -6,6 +6,8 @@
     scrollbar-color: grey #005b99;
     scrollbar-width: thin;
   }
+
+
   
   body {
     font-family: "Bree Serif", serif;
@@ -49,6 +51,7 @@
   /* Main Content */
   main {
     padding: 2rem;
+    padding-top: 5px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -75,13 +78,16 @@
   .floating-pane {
     background-color: #005b99;
     color: white;
-    padding: 1.5rem; 
+    padding: 0.5rem; 
     border-radius: 8px;
     width: 250px;
     position: sticky;
     top: 0;
+    
     max-height: 90vh;
+    overflow: hidden;
     overflow-y: auto;
+    
 
   }
   
@@ -104,6 +110,7 @@
     border-radius: 6px;
     border: 1px solid #aaa;
     width: 100%;
+    cursor: pointer;
   }
   
   /* Checkbox and Communication Preferences */
@@ -158,6 +165,10 @@
     margin: 1px;
   }
 
+  .table-actions{
+    margin-left: 1%;
+  }
+
   #applyFiltersButton {
     color: #005b99;
     background-color: white;
@@ -168,7 +179,7 @@
     border-collapse: collapse;
     width: 100%;
     border-radius: 8px;
-    overflow: hidden;
+    overflow: auto;
     font-size: 0.9rem; /* Slightly reduce font size */
 }
   

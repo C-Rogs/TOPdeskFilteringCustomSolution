@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CAMdesk Selections</title>
+    <title>Host Contact Database</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bree+Serif&display=swap" rel="stylesheet">
@@ -12,27 +12,26 @@
 <body>
     <!-- Header -->
     <header>
-        <div class="logo">NHS Teaching Hospital</div>
+        <div class="logo">Host Contact Database Filtering Tool</div>
     </header>
 
     <!-- Main Content -->
     <main>
         <!-- Users Section -->
         <section id="users">
-            <h2>Host Contact Database</h2>
+            <!--<h2>Host Contact Database</h2> -->
             
-            <!-- Rows Per Page Selector -->
-            <label for="pageSize">Rows per page:</label>
-            <select id="pageSize">
-                <option value="50">50</option>
-                <option value="100">100</option>
-                <option value="200">200</option>
-                <option value="500">500</option>
-                <option value="5000">5000</option>
-            </select>
-
             <!-- Copy and Export Buttons -->
             <div class="table-actions">
+                <!-- Rows Per Page Selector -->
+                <label for="pageSize">Rows per page:</label>
+                <select id="pageSize">
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                    <option value="200">200</option>
+                    <option value="500">500</option>
+                    <option value="5000">5000</option>
+                </select>
                 <button id="copyButton">Copy Table</button>
                 <button id="exportButton">Export to CSV</button>
             </div>
@@ -65,6 +64,7 @@
                     <label for="extraBFilter">Host Trust Name:</label>
                     <select name="extraBFilter" id="extraBFilter" multiple></select>
 
+                    <!-- Not required fields
                     <label for="optionalFields1T1sFilter">Professional Number:</label>
                     <input name="optionalFields1T1sFilter" id="optionalFields1T1sFilter" ></input>
 
@@ -79,6 +79,7 @@
 
                     <label for="optionalFields1N1sFilter">FTE:</label>
                     <input name="optionalFields1N1sFilter" id="optionalFields1N1sFilter" ></input>
+                    -->
 
                     <label for="optionalFields2D1sFilter">Host Contacts Updated Before:</label>
                     <input type="date" name="optionalFields2D1sFilter" id="optionalFields2D1sFilter" ></input>
@@ -132,11 +133,13 @@
                                 <th data-sort="locationSetting">Location setting</th>
                                 <th data-sort="personExtraFieldA">Host Organisation</th>
                                 <th data-sort="personExtraFieldB">Host Trust</th>
+                                <!-- Not required anymore
                                 <th data-sort="optionalFields1T1">GMC/GDCP/Public Health Number</th>
                                 <th data-sort="optionalFields1T2">Assignment Number</th>
                                 <th data-sort="optionalFields1T3">NHS OMP Scheme</th>
                                 <th data-sort="optionalFields1D1">Professional Registration Expire Date</th>
                                 <th data-sort="optionalFields1N1">FTE</th>
+                                -->
                                 <th data-sort="optionalFields2S1">Host Org - Position</th>
                                 <th data-sort="optionalFields2S2">Host Org - Specialism</th>
                                 <th data-sort="optionalFields1B1">Industrial Action</th>
