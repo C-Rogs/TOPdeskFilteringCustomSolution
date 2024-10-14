@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function() {
-    const BASE_URL = "https://demo-uk2.topdesk.net/tas/api";
+    const BASE_URL = location.origin+"/tas/api";
     let users = [];
     let departments = [];
     let extraAs = [];
@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Fetch users with pagination and filters
     async function fetchUsers(pageSize = 50, departments = [], extraAs = [], extraBs = [], optionalFields1Searchlist1s = [], optionalFields1Searchlist2s = [],optionalFields2Searchlist1s = [], optionalFields2Searchlist2s = [], selectedOptionalFields1T1s, selectedOptionalFields1T2s, selectedOptionalFields1T3s , selectedOptionalFields1D1s, selectedOptionalFields1N1s, selectedOptionalFields2D1s, optionalFields = []) {
-        let query = `branch.name==Delft`;
+        let query = `branch.name=="Host Contact Database"`;
 
         if (departments.length > 0) {
             query += `;department.name=in=("${departments.join('","')}")`;
